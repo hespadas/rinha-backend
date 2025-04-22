@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://rinha:rinha@db:5432/rinha
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: rinha
+      POSTGRES_USER: espadas
+      POSTGRES_PASSWORD: espadas123
+    ports:
+      - "15432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
