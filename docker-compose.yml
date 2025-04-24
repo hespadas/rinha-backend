@@ -5,9 +5,10 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      - DATABASE_URL=postgresql://rinha:rinha@db:5432/rinha
+      - DATABASE_URL=postgresql://espadas:espadas123@db:5432/rinha
 
   db:
     image: postgres:15
@@ -19,3 +20,8 @@ services:
       - "15432:5432"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U espadas -d rinha"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
