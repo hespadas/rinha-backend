@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from .db import setup_db_events, db_pool, init_db_pool
+from src.rinha import db
 
 app = FastAPI()
-setup_db_events(app)
+db.setup_db_events(app)
 
 @app.get("/")
 async def root():
@@ -11,11 +11,8 @@ async def root():
 
 @app.get("/test-db")
 async def test_db():
-    from .db import db_pool
-    if db_pool is None:
-        return {"error": "DB pool is not initialized."}
     try:
-        async with db_pool.acquire() as conn:
+        async with db.db_pool.acquire() as conn:
             result = await conn.fetchval("SELECT 1")
             return {"db": result}
     except Exception as e:
