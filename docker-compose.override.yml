@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  load-test:
+    image: denvazh/gatling:3.8.4
+    command: -s simulations.RinhaSimulation
+    volumes:
+      - ./load-test/user-files:/opt/gatling/user-files
+      - ./load-test/results:/opt/gatling/results
+    network_mode: host
+    depends_on:
+      - nginx
